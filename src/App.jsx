@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import "./App.css";
 
 const services = [
@@ -99,7 +100,14 @@ const process = [
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("7lance-theme") || "dark"
+  );
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    localStorage.setItem("7lance-theme", newTheme);
+    setTheme(newTheme);
+  };
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({
       behavior: "smooth",
@@ -108,7 +116,8 @@ function App() {
   };
 
   return (
-    <div className="app">
+
+    <div className={`app ${theme}-mode`}>
       {/* NAVBAR */}
       <header className="navbar">
         <div className="container nav-inner">
@@ -139,6 +148,17 @@ function App() {
           >
             Start a Project
           </button>
+          <button
+  className="theme-toggle"
+  onClick={toggleTheme}
+  aria-label={
+    theme === "dark"
+      ? "Switch to light mode"
+      : "Switch to dark mode"
+  }
+  title="Switch theme">
+  {theme === "dark" ? "☀ Light" : "☾ Dark"}
+</button>
         </div>
       </header>
 
@@ -171,7 +191,7 @@ function App() {
                 >
                   Start a Project <span>↗</span>
                 </button>
-
+            
                 <button
                   className="secondary-btn"
                   onClick={() => scrollTo("work")}
